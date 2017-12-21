@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using WebApiApplication.Infrastructure.ApiControllers;
 
 namespace WebApiApplication.Controllers
 {
     [Route("api/[controller]")]
-    public class ValuesController : Controller
+    public class ValuesController : ApiBaseController
     {
         // GET api/values
         [HttpGet]
