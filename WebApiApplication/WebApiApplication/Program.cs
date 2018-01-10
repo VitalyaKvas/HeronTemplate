@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using NLog.Web;
+using System;
 
 namespace WebApiApplication
 {
@@ -21,7 +16,19 @@ namespace WebApiApplication
         /// <param name="args">The command line args.</param>
         public static void Main(string[] args)
         {
-            BuildWebHost(args).Run();
+            // NLog: setup the logger first to catch all errors
+            var logger = NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
+            try
+            {
+                logger.Debug("init main");
+                BuildWebHost(args).Run();
+            }
+            catch (Exception ex)
+            {
+                // NLog: catch setup errors
+                logger.Error(ex, "Stopped program because of exception");
+                throw;
+            }
         }
 
         /// <summary>
@@ -32,6 +39,7 @@ namespace WebApiApplication
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
+                .UseNLog() // NLog: setup NLog for Dependency injection
                 .Build();
     }
 }

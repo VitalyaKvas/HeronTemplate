@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using WebApiApplication.Infrastructure.ApiControllers;
 
@@ -10,6 +11,15 @@ namespace WebApiApplication.Controllers
     [Route("api/[controller]")]
     public class ValuesController : ApiBaseController
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="logger">ILogger</param>
+        public ValuesController(ILogger<ValuesController> logger)
+            : base(logger)
+        {
+        }
+
         /// <summary>
         /// Get all values
         /// </summary>

@@ -14,6 +14,9 @@ namespace WebApiApplication.Infrastructure.ApiControllers
 #endif
         public string StackTrace { get; set; }
 
-        public ApiResponse() { }
+        public ApiResponse()
+        {
+            StatusCode = 200;
+        }
     }
 }

@@ -36,12 +36,12 @@ namespace WebApiApplication
         {
             services.AddMvc(options =>
             {
-                options.Filters.Add(new ApiExceptionFilter());
-                options.Filters.Add(new ApiActionFilter());
+                options.Filters.Add(typeof(ApiExceptionFilter));
+                options.Filters.Add(typeof(ApiActionFilter));
             });
 
             services.AddLogging();
-            
+
             // Inject an implementation of ISwaggerProvider with defaulted settings applied
             services.AddSwaggerGen(c =>
             {

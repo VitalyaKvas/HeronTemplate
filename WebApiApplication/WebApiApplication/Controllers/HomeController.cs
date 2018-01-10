@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using WebApiApplication.Infrastructure.ApiControllers;
 
 namespace WebApiApplication.Controllers
@@ -9,6 +10,15 @@ namespace WebApiApplication.Controllers
     [Route("[controller]")]
     public class HomeController : ApiBaseController
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="logger">ILogger</param>
+        public HomeController(ILogger<HomeController> logger)
+            : base(logger)
+        {
+        }
+
         /// <summary>
         /// Simulates not found action
         /// </summary>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Logging;
 using System;
 using WebApiApplication.Infrastructure.ApiControllers;
 
@@ -7,8 +8,17 @@ namespace WebApiApplication.Infrastructure.Filter
 {
     public class ApiExceptionFilter : ExceptionFilterAttribute
     {
+        private readonly ILogger logger;
+
+        public ApiExceptionFilter(ILoggerFactory loggerFactory)
+        {
+            logger = loggerFactory.CreateLogger("ApiExceptionFilter");
+        }
+
         public override void OnException(ExceptionContext context)
         {
+            logger.LogError(context.Exception, "Exception in action.");
+
             var apiResponse = new ApiResponse();
 
             switch (context.Exception)
