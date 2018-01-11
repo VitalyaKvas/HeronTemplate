@@ -12,7 +12,7 @@ namespace WebApiApplication.Controllers
     public class ValuesController : ApiBaseController
     {
         /// <summary>
-        /// Constructor
+        /// Creates a new instance with the given value.
         /// </summary>
         /// <param name="logger">ILogger</param>
         public ValuesController(ILogger<ValuesController> logger)

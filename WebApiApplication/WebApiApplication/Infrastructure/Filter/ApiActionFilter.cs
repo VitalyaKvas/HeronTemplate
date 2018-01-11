@@ -5,15 +5,27 @@ using WebApiApplication.Infrastructure.ApiControllers;
 
 namespace WebApiApplication.Infrastructure.Filter
 {
+    /// <summary>
+    /// Filter to catch all Action and wrap these data in a beautiful view.
+    /// </summary>
     public class ApiActionFilter : ActionFilterAttribute
     {
         private readonly ILogger logger;
 
+        /// <summary>
+        /// Creates a new instance with the given value.
+        /// </summary>
+        /// <param name="loggerFactory">ILoggerFactory</param>
         public ApiActionFilter(ILoggerFactory loggerFactory)
         {
             logger = loggerFactory.CreateLogger("ApiActionFilter");
         }
 
+        /// <summary>
+        /// Called after the action executes, before the action result.
+        /// And modifies the response.
+        /// </summary>
+        /// <param name="context">ActionExecutedContext</param>
         public override void OnActionExecuted(ActionExecutedContext context)
         {
             var apiResponse = new ApiResponse();

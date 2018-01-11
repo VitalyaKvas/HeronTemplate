@@ -15,7 +15,7 @@ namespace WebApiApplication.Infrastructure.ApiControllers
         protected ILogger Logger { get; set; }
 
         /// <summary>
-        /// Base constructor
+        /// Creates a new instance with the given value.
         /// </summary>
         /// <param name="logger">ILogger</param>
         public ApiBaseController(ILogger logger)

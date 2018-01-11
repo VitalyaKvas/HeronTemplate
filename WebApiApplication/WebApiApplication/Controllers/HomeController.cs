@@ -11,7 +11,7 @@ namespace WebApiApplication.Controllers
     public class HomeController : ApiBaseController
     {
         /// <summary>
-        /// Constructor
+        /// Creates a new instance with the given value.
         /// </summary>
         /// <param name="logger">ILogger</param>
         public HomeController(ILogger<HomeController> logger)
