@@ -1,7 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using WebApiApplication.Infrastructure.ApiControllers;
+using static Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary;
 
 namespace WebApiApplication.Infrastructure.Filter
 {
@@ -32,11 +36,48 @@ namespace WebApiApplication.Infrastructure.Filter
 
             var result = context.Result as ObjectResult;
             if (result == null || result.Value == null)
-                return;
-
-            if (result.StatusCode != null)
             {
-                apiResponse.ErrorMessages = result.Value.ToString();
+                context.Result = new JsonResult(apiResponse);
+                return;
+            }
+
+            if (result.StatusCode != null && result.StatusCode != StatusCodes.Status200OK)
+            {
+                switch (result.Value)
+                {
+                    case ValueEnumerable list:
+                        {
+                            if (apiResponse.ErrorsValidation == null)
+                                apiResponse.ErrorsValidation = new List<string>();
+
+                            foreach (var modelState in list)
+                                foreach (var error in modelState.Errors)
+                                {
+                                    apiResponse.ErrorsValidation.Add(error.ErrorMessage);
+                                }
+
+                            apiResponse.ErrorMessages = "Values are not valid.";
+
+                        } break;
+                    case IEnumerable<IdentityError> list:
+                        {
+                            if (apiResponse.ErrorsValidation == null)
+                                apiResponse.ErrorsValidation = new List<string>();
+
+                            foreach (var error in list)
+                            {
+                                apiResponse.ErrorsValidation.Add(error.Description);
+                            }
+
+                            apiResponse.ErrorMessages = "Values are not valid.";
+
+                        } break;
+                    default:
+                        {
+                            apiResponse.ErrorMessages = result.Value.ToString();
+                        } break;
+                }
+                
                 apiResponse.StatusCode = result.StatusCode.Value;
 
                 logger.LogError($"ActionDescriptor: {context.ActionDescriptor.DisplayName}, StatusCode: {apiResponse.StatusCode}, ErrorMessages: {apiResponse.ErrorMessages}.");
